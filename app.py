@@ -1,41 +1,49 @@
-
 import streamlit as st
-import openai
 from PIL import Image
+import openai
 import io
 
-# 페이지 설정
-st.set_page_config(page_title="리토끼GPT", page_icon="🐰")
-st.title("🐰 리토끼GPT – 감성 디카시 생성기")
+st.set_page_config(page_title="리토끼GPT – 감성 디카시 생성기", layout="centered")
+
+st.title("🐰 리토끼GPT - 감성 디카시 생성기")
 st.markdown("한 장의 사진과 당신의 감정을 AI 친구, 리토끼GPT가 시로 풀어드립니다.")
 
-# 사용자 OpenAI API 키 입력
-openai.api_key = st.text_input("🔑 OpenAI API 키를 입력해주세요", type="password")
+# API 키 입력
+user_api_key = st.text_input("🔑 OpenAI API 키를 입력해주세요", type="password")
 
-# 사진 업로드
-st.subheader("🖼️ 오늘의 디카시")
-image = st.file_uploader("사진을 업로드해주세요", type=["jpg", "jpeg", "png"])
+# 이미지 업로드
+st.header("🖼️ 오늘의 디카시")
+uploaded_file = st.file_uploader("사진을 업로드해주세요", type=["jpg", "jpeg", "png"])
 
-# 감정 또는 상황 입력
-if image:
+if uploaded_file:
+    image = Image.open(uploaded_file)
     st.image(image, caption="업로드한 이미지", use_column_width=True)
-    user_emotion = st.text_input("💬 이 사진을 보고 떠오른 감정이나 장면을 적어주세요", placeholder="예: 고요한 호수 위 햇살, 그리움, 여름밤")
 
-    if user_emotion and openai.api_key:
-        prompt = f"'{user_emotion}'이라는 감정 또는 장면을 바탕으로 감성적인 한국어 디카시 한 편을 써줘. 시적 언어로, 짧고 여운 있게."
+    # 감성 키워드 입력
+    prompt = st.text_input("💬 이 사진을 보고 떠오른 감정이나 장면을 적어주세요", placeholder="예: 햇살, 그리움, 여운")
 
-        # GPT-3.5 Turbo로 시 생성
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
+    if st.button("✍️ 디카시 생성하기"):
+        if not user_api_key:
+            st.error("⚠️ 먼저 OpenAI API 키를 입력해주세요.")
+        elif not prompt:
+            st.error("⚠️ 감성 키워드를 입력해주세요.")
+        else:
+            with st.spinner("리토끼GPT가 시를 쓰는 중... 🐰🖋️"):
+                try:
+                    openai.api_key = user_api_key
+                    response = openai.chat.completions.create(
+                        model="gpt-4",
+                        messages=[
+                            {"role": "system", "content": "너는 감성적인 시를 쓰는 시인이야."},
+                            {"role": "user", "content": f"다음 감정을 담아 한 편의 디카시를 써줘: {prompt}"}
+                        ],
+                        temperature=0.8
+                    )
+                    poem = response.choices[0].message.content.strip()
+                    st.success("디카시 생성 완료!")
+                    st.markdown(f"### ✨ 리토끼의 디카시\n\n{poem}")
+                except Exception as e:
+                    st.error(f"⚠️ 오류 발생: {e}")
 
-        # 결과 출력
-        st.write("✍️ 디카시 생성 결과:")
-        st.markdown(response.choices[0].message.content)
-
-# 푸터
 st.markdown("---")
-st.caption("© 2025 리토끼GPT. 감정은 당신에게, 기술은 우리에게.")
+st.caption("© 2025 리토끼GPT. 감성은 당신에게, 기술은 우리에게.")
