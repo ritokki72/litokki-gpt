@@ -44,3 +44,6 @@ if uploaded_file:
                     st.markdown(f"### ✨ 리토끼의 디카시\n\n{poem}")
                 except Exception as e:
                     st.error(f"⚠️ 오류 발생: {e}")
+
+st.markdown("---")
+st.caption("© 2025 리토끼GPT. 감성은 당신에게, 기술은 우리에게.")
