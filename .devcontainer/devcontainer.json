@@ -45,5 +45,7 @@ if uploaded_file:
                 except Exception as e:
                     st.error(f"⚠️ 오류 발생: {e}")
 
+# 🔄 강제 리빌드 테스트용 주석입니다.
+
 st.markdown("---")
 st.caption("© 2025 리토끼GPT. 감성은 당신에게, 기술은 우리에게.")
