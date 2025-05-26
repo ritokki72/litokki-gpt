@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
 
-st.set_page_config(page_title="리토끼GPT - 감성의 집", layout="centered")
+st.set_page_config(page_title='리토끼GPT - "감성의 집"', layout="centered")
 
 st.title("🐰 리토끼GPT – 감성의 집")
 st.markdown("어떤 마음이든, 어떤 글이든 더 넓어질 수 있는 공간." 
