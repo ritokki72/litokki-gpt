@@ -3,7 +3,6 @@ import openai
 from PIL import Image
 import os
 
-# ✅ 페이지 제목 명시적으로 설정
 st.set_page_config(page_title="리토끼GPT - 감성 디카시 생성기")
 
 st.markdown("""
@@ -17,16 +16,16 @@ st.markdown("""
 api_key = st.text_input("🔑 OpenAI API 키를 입력하세요", type="password")
 
 # 이미지 업로드
-uploaded_file = st.file_uploader("포토지마다 가장 가볍게 업로드해주세요", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("포토지마다 가장 견본적인 파일을 업로드해주세요", type=["jpg", "jpeg", "png"])
 if uploaded_file:
     image = Image.open(uploaded_file)
-    st.image(image, caption="업로드한 사진", use_container_width=True)
+    st.image(image, caption="업로드한 사진", use_column_width=True)
 
 # 장르 선택
 genre = st.selectbox("포스팅할 글의 형식을 선택해주세요", ["시", "수필"])
 
 # 감성 키워드 입력
-keyword = st.text_input("🌱 감성을 입력해주세요 (예: 아름다운 느낌, 구름, 살인)")
+keyword = st.text_input("🌱 감성을 입력해주세요 (예: 아름다운 느낌, 구름, 설렘)")
 
 # 생성 버튼
 if st.button("🌸 디카시 생성하기"):
@@ -43,6 +42,9 @@ if st.button("🌸 디카시 생성하기"):
             - 키워드: {keyword}
             - 시적인 표현, 감동을 주는 흐름, 사람의 마음을 어루만지는 언어 사용
             - 문학적인 개성 강조 (특히 시의 경우 함축적이고 이미지 중심 표현 사용)
+            - 감성의 흐름 안에서 '사랑'이라는 단어는 진정성 있는 경우에만 사용해주세요.
+              단순한 마무리 문구로 반복되지 않도록 유의하며,
+              사랑 없이도 감동을 줄 수 있는 시를 지향합니다.
             - 결과는 제목 + 본문으로 구성
             """
 
@@ -59,3 +61,4 @@ if st.button("🌸 디카시 생성하기"):
                 st.success(result)
             except Exception as e:
                 st.error(f"오류 발생: {e}")
+
