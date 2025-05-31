@@ -8,7 +8,7 @@ st.set_page_config(page_title="리토끼GPT - 감성 디카시 생성기")
 st.markdown("""
 # 🐰 리토\eb07cGPT – 감성 디카시 생성기
 한 장의 사진, 한 줄의 감정.  
-**감정과 이야기를 리토\eb07c와 함께 푸르어보세요.**  
+**감정과 이야기를 리토\eb07c와 함께 풀어보세요.**  
 (지금은 사진 없이 감성 키워드만 입력해도 작동합니다)
 """)
 
@@ -25,7 +25,7 @@ if uploaded_file:
 genre = st.selectbox("포스팅할 글의 형식을 선택해주세요", ["시", "수필"])
 
 # 감성 키워드 입력
-keyword = st.text_input("🌱 감성을 입력해주세요 (예: 아름다운 느꾜, 구름, 살인)")
+keyword = st.text_input("🌱 감성을 입력해주세요 (예: 어머니, 구름, 사랑)")
 
 # 생성 버튼
 if st.button("🌸 디카시 생성하기"):
