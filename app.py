@@ -16,27 +16,25 @@ st.markdown("""
 api_key = st.text_input("🔑 OpenAI API 키를 입력하세요", type="password")
 
 # 이미지 업로드
-uploaded_file = st.file_uploader("포토지마다 가장 견본적인 파일을 업로드해주세요", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("사진을 업로드하세요", type=["jpg", "jpeg", "png"])
 if uploaded_file:
     image = Image.open(uploaded_file)
     st.image(image, caption="업로드한 사진", use_column_width=True)
 
 # 장르 선택
-genre = st.selectbox("포스팅할 글의 형식을 선택해주세요", ["시", "수필"])
+genre = st.selectbox("🌸 생성할 글의 형식을 선택하세요", ["시", "수필"])
 
 # 감성 키워드 입력
-keyword = st.text_input("🌱 감성을 입력해주세요 (예: 아름다운 느낌, 구름, 살인)")
+keyword = st.text_input("🌱 감성을 입력하세요 (예: 어머니, 구름, 새벽 등)")
 
 # 생성 버튼
-if st.button("🌸 디카시 생성하기"):
+if st.button("🌺 디카시 생성하기"):
     if not api_key:
         st.warning("우선 OpenAI API 키를 입력해주세요.")
     elif not keyword:
         st.warning("감성 키워드를 입력해주세요.")
     else:
-        with st.spinner("키워드로 디카시 생성 중..."):
-            client = openai.OpenAI(api_key=api_key)
-
+        with st.spinner("디카시 생성 중입니다..."):
             prompt = f"""
             다음 조건을 참고하여 감성적인 {genre}을(를) 작성해줘:
             - 키워드: {keyword}
@@ -46,16 +44,16 @@ if st.button("🌸 디카시 생성하기"):
             """
 
             try:
-                response = client.chat.completions.create(
+                response = openai.chat.completions.create(
                     model="gpt-4",
                     messages=[
                         {"role": "system", "content": "당신은 감성적인 시를 잘 쓰는 디카시 작가입니다."},
                         {"role": "user", "content": prompt}
-                    ]
+                    ],
+                    api_key=api_key
                 )
                 result = response.choices[0].message.content
                 st.markdown("## 🌸 생성된 디카시")
                 st.success(result)
             except Exception as e:
                 st.error(f"오류 발생: {e}")
-
