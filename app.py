@@ -11,40 +11,40 @@ st.markdown("""
 (지금은 사진 없이 감성 키워드만 입력해도 작동합니다)
 """)
 
-# OpenAI API 키 입력
+# API 키 입력
 api_key = st.text_input("🔑 OpenAI API 키를 입력하세요", type="password")
 
 # 이미지 업로드
-uploaded_file = st.file_uploader("포토지마다 가장 가볍게 업로드해주세요", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("📷 포토지마다 가장 가볍게 업로드해주세요", type=["jpg", "jpeg", "png"])
 if uploaded_file:
     image = Image.open(uploaded_file)
-    st.image(image, caption="업로드한 사진", use_container_width=True)
+    st.image(image, caption="업로드한 사진", use_column_width=True)
 
 # 장르 선택
-genre = st.selectbox("포스팅할 글의 형식을 선택해주세요", ["시", "수필"])
+genre = st.selectbox("📖 포스팅할 글의 형식을 선택해주세요", ["시", "수필"])
 
-# 감성 키워드 입력
-keyword = st.text_input("🌱 감성을 입력해주세요 (예: 아름다운 느낌, 구름, 계절)")
+# 감성 키워드
+keyword = st.text_input("🌱 감성을 입력해주세요 (예: 아름다운 느낌, 구름, 새벽 등)")
 
-# 생성 버튼
+# 버튼
 if st.button("🌸 디카시 생성하기"):
     if not api_key:
-        st.warning("우선 OpenAI API 키를 입력해주세요.")
+        st.warning("OpenAI API 키를 입력해주세요.")
     elif not keyword:
         st.warning("감성 키워드를 입력해주세요.")
     else:
         with st.spinner("디카시 생성 중..."):
-            openai.api_key = api_key  # ✅ 최신 방식으로 API 키 설정
-
-            prompt = f"""
-            다음 조건을 참고하여 감성적인 {genre}을(를) 작성해줘:
-            - 키워드: {keyword}
-            - 시적인 표현, 감동을 주는 흐름, 사람의 마음을 어루만지는 언어 사용
-            - 문학적인 개성 강조 (특히 시의 경우 함축적이고 이미지 중심 표현 사용)
-            - 결과는 제목 + 본문으로 구성
-            """
-
             try:
+                openai.api_key = api_key  # ✅ 여기서 api_key 설정
+
+                prompt = f"""
+                다음 조건을 참고하여 감성적인 {genre}을(를) 작성해줘:
+                - 키워드: {keyword}
+                - 시적인 표현, 감동을 주는 흐름, 사람의 마음을 어루만지는 언어 사용
+                - 문학적인 개성 강조 (특히 시의 경우 함축적이고 이미지 중심 표현 사용)
+                - 결과는 제목 + 본문으로 구성
+                """
+
                 response = openai.ChatCompletion.create(
                     model="gpt-4",
                     messages=[
@@ -55,5 +55,6 @@ if st.button("🌸 디카시 생성하기"):
                 result = response.choices[0].message.content
                 st.markdown("## 🌸 생성된 디카시")
                 st.success(result)
+
             except Exception as e:
                 st.error(f"오류 발생: {e}")
